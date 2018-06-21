@@ -62,8 +62,8 @@ conn.sync({ force: true })
       model: Ship
     }]
   }))
-.then(member => console.log(member.ship.name))
-.catch(error => console.log(error));
+  .then(member => console.log(member.ship.name))
+  .catch(error => console.log(error));
 
 //SEARCH FOR ALL CREW MEMBERS OF ENTERPRISE WITH EAGER LOADING OF ALL ROWS OF MEMBERS TABLE
 
