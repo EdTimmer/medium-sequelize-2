@@ -25,6 +25,7 @@ const Member = conn.define('member', {
 
 Member.belongsTo(Ship);
 Ship.hasMany(Member);
+// Ship.hasMany(Member, {as: 'occupants'});
 
 const seed = () => {
   return Promise.all([
@@ -50,22 +51,23 @@ const seed = () => {
   .catch(error => console.log(error));
 };
 
-//SEARCH FOR SPOCK'S SHIP WITH EAGER LOADING OF ALL ROWS OF SHIPS TABLE
+//SEARCH FOR FRY'S SHIP
 
 conn.sync({ force: true })
 .then(() => seed())
 .then(() => Member.findOne({
   where: {
-    name: 'Spock'
+    name: 'Fry'
   },
     include: [{
       model: Ship
     }]
   }))
-  .then(member => console.log(member.ship.name))
+  // .then(member => console.log(JSON.stringify(member)))
+  .then(member => console.log(`${member.name} is a crew member of ${member.ship.name}`))
   .catch(error => console.log(error));
 
-//SEARCH FOR ALL CREW MEMBERS OF ENTERPRISE WITH EAGER LOADING OF ALL ROWS OF MEMBERS TABLE
+//SEARCH FOR ALL CREW MEMBERS OF ENTERPRISE
 
 // conn.sync({ force: true })
 // .then(() => seed())
@@ -77,10 +79,11 @@ conn.sync({ force: true })
 //       model: Member
 //     }]
 //   }))
+// // .then(ship => console.log(JSON.stringify(ship)))
 // .then(ship => ship.members.forEach(member => console.log(member.name)))
 // .catch(error => console.log(error));
 
-//SEARCH FOR ALL HUMAN CREW MEMBERS OF ENTERPRISE WITH EAGER LOADING OF ONLY HUMANS FROM THE MEMBERS TABLE
+//SEARCH FOR ALL HUMAN CREW MEMBERS OF ENTERPRISE
 
 // conn.sync({ force: true })
 // .then(() => seed())
@@ -98,7 +101,37 @@ conn.sync({ force: true })
 // .then(ship => ship.members.forEach(member => console.log(member.name)))
 // .catch(error => console.log(error));
 
+//EAGER LOADING WITH ALIAS TO FIND ALL CREW MEMBERS OF PLANET EXPRESS
 
+// conn.sync({ force: true })
+// .then(() => seed())
+// .then(() => Ship.findOne({
+//   where: {
+//     name: 'Planet Express'
+//   },
+//     include: [{
+//       model: Member,
+//       as: 'occupants'
+//     }]
+//   }))
+// .then(ship => ship.occupants.forEach(occupant => console.log(occupant.name)))
+// .catch(error => console.log(error));
 
+// EAGER LOADING WITH ALIAS TO FIND HYBRID CREW MEMBERS OF ENTERPRISE
 
-
+// conn.sync({ force: true })
+// .then(() => seed())
+// .then(() => Ship.findOne({
+//   where: {
+//     name: 'Enterprise'
+//   },
+//     include: [{
+//       model: Member,
+//       as: 'occupants',
+//       where: {
+//         species: 'hybrid'
+//       }
+//     }]
+//   }))
+// .then(ship => ship.occupants.forEach(occupant => console.log(occupant.name)))
+// .catch(error => console.log(error));
